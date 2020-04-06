@@ -62,7 +62,7 @@ public class Post {
         this.title = title;
         this.anons = anons;
         this.full_text = full_text;
-        //some text
+        //add new  text
 
     }
 }
