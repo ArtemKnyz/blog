@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.security.auth.login.AccountException;
 import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -64,24 +65,22 @@ public class BlogController {
         model.addAttribute("post", res);
         return "blog-edit";
     }
+
     @PostMapping("/blog/{id}/edit")
-    public String blogPostUpdate(@RequestParam(value = "id") long id, @RequestParam String title, @RequestParam String anons, @RequestParam String full_text, Model model){
-        Post post = postRepository.findById(id).orElseThrow();
+    public String blogPostUpdate(@PathVariable(value = "id") long id, @RequestParam String title, @RequestParam String anons, @RequestParam String full_text, Model model){
+        Post post = postRepository.findById(id).orElseThrow(RuntimeException::new);
         post.setTitle(title);
         post.setAnons(anons);
         post.setFull_text(full_text);
         postRepository.save(post);
-
         return "redirect:/blog";
     }
+
 
     @PostMapping("/blog/{id}/remove")
-    public String blogPostDelete(@RequestParam(value = "id") long id, Model model){
-        Post post = postRepository.findById(id).orElseThrow();
+    public String blogPostDelete(@PathVariable(value = "id") long id, Model model){
+        Post post = postRepository.findById(id).orElseThrow(RuntimeException::new);
         postRepository.delete(post);
-
         return "redirect:/blog";
     }
-
-
 }
